@@ -1,0 +1,218 @@
+# ===================================================================
+# ⛔ OS и файловые системы
+# ===================================================================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+lost+found/
+*.picasaoriginal
+.tmp/
+.cache/
+*.lock
+.project
+.metadata
+
+# ===================================================================
+# ⛔ Python
+# ===================================================================
+__pycache__/
+*.py[co]
+*.pyd
+*.pyc.*
+*.pyc.?
+*.pyo
+*.pyc
+*.so
+*.egg-info/
+*.egg
+*.whl
+dist/
+build/
+develop-eggs/
+eggs/
+parts/
+downloads/
+.installed.cfg
+*.manifest
+pip-log.txt
+pip-delete-this-directory.txt
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.pyre/
+.pytype/
+.pydantic_cache/
+*.ipynb_checkpoints
+
+# ===================================================================
+# ⛔ Виртуальные окружения
+# ===================================================================
+venv/
+env/
+.venv/
+ENV/
+.env/
+.env.bak
+.env.local
+.env.development
+.env.staging
+.env.production
+.env.test
+.venv.bak
+pip-selfcheck.json
+
+# ===================================================================
+# ⛔ Django
+# ===================================================================
+db.sqlite3
+db.sqlite3-journal
+*.log
+logs/
+log/
+media/
+staticfiles/
+collectstatic/
+local_settings.py
+settings_local.py
+*/settings_local.py
+templates_c/
+celerybeat-schedule
+celerybeat.pid
+
+# ===================================================================
+# ⛔ FastAPI / Starlette
+# ===================================================================
+uvicorn.log
+*.log.*
+/openapi.json
+/swagger.json
+/docs/
+/redoc/
+
+# ===================================================================
+# ⛔ Telegram-боты
+# ===================================================================
+*.session
+*.session-journal
+bot.log
+logs/bot_*.log
+bot_media_cache/
+
+# ===================================================================
+# ⛔ Alembic (SQLAlchemy)
+# ===================================================================
+migration/versions/.cache/
+migration/env.pyc
+test.db
+test_*.db
+
+# ===================================================================
+# ⛔ IDE и редакторы
+# ===================================================================
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+.*.sw[a-p]
+.swp
+*~
+
+# Emacs
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list/
+tramp
+
+# ===================================================================
+# ⛔ Конфигурация и секреты
+# ===================================================================
+# Env-файлы
+.env
+env
+*.env
+*env
+
+# Конфиги
+config.json
+config.yaml
+secrets.json
+keys.json
+private.key
+*.pem
+*.key
+*.token
+token.txt
+
+# ===================================================================
+# ⛔ Логи и временные файлы
+# ===================================================================
+logs/
+*.log
+*.log.*
+tmp/
+temp/
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ===================================================================
+# ⛔ Docker и контейнеры
+# ===================================================================
+Dockerfile.local
+docker-compose.override.yml
+.dockerignore
+*.dockerfile
+.docker/
+containerd/
+docker-context/
+
+# ===================================================================
+# ⛔ Node.js (если используется фронт)
+# ===================================================================
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+.npm
+.yarn
+
+# ===================================================================
+# ⛔ Прочее
+# ===================================================================
+Screenshots/
+screenshot*.png
+*.bak
+*.backup
+*.old
+*.orig
+local/
+debug/
