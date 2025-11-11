@@ -20,7 +20,6 @@ repos:
       - id: check-toml
       - id: check-case-conflict
       - id: check-merge-conflict
-      - id: check-docstring-first
       - id: debug-statements
       - id: check-builtin-literals
       - id: detect-private-key
@@ -51,7 +50,6 @@ repos:
         additional_dependencies:
           - flake8-bugbear
           - flake8-print
-          - flake8-docstrings
         exclude: "__init__.py"
 
   - repo: https://github.com/rbubley/mirrors-prettier
@@ -60,18 +58,7 @@ repos:
       - id: prettier
         types_or: [yaml, markdown, toml]
 
-  - repo: https://github.com/myint/docformatter
-    rev: v1.7.7
-    hooks:
-      - id: docformatter
-        args:
-          [
-            "--in-place",
-            "--pre-summary-newline",
-            "--wrap-descriptions=88",
-            "--wrap-summaries=88",
-          ]
-        types: [python]
+
 
   - repo: https://github.com/pycqa/bandit
     rev: 1.8.6
