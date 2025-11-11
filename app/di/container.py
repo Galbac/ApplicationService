@@ -1,7 +1,7 @@
 import logging
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncIterable
 
-from dishka import Provider, Scope, provide
+from dishka import Provider, Scope, provide, make_async_container
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
@@ -10,8 +10,8 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from app.core.config import settings
+from app.database.repository import ApplicationRepository
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -33,6 +33,18 @@ class DatabaseProvider(Provider):
     @provide(scope=Scope.REQUEST)
     async def session(
         self, session_maker: async_sessionmaker[AsyncSession]
-    ) -> AsyncGenerator[AsyncSession, None]:
+    ) -> AsyncIterable[AsyncSession]:
         async with session_maker() as session:
             yield session
+
+
+class RepositoryProvider(Provider):
+    @provide(scope=Scope.REQUEST)
+    def provide_application_repo(self, session: AsyncSession) -> ApplicationRepository:
+        return ApplicationRepository(session)
+
+
+container = make_async_container(
+    DatabaseProvider(),
+    RepositoryProvider(),
+)

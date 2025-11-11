@@ -58,11 +58,8 @@ repos:
       - id: prettier
         types_or: [yaml, markdown, toml]
 
-
-
   - repo: https://github.com/pycqa/bandit
     rev: 1.8.6
     hooks:
       - id: bandit
-        args: ["-c", "pyproject.toml", "-r"]
         exclude: "^tests/"
