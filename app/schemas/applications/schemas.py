@@ -26,7 +26,12 @@ class ApplicationResponse(BaseModel):
         ..., description="Date and time of application creation"
     )
 
-    model_config = {"from_attributes": True}
+    model_config = {
+        "from_attributes": True,
+        "json_encoders": {
+            datetime: lambda v: v.strftime("%d-%m-%Y %H:%M:%S"),
+        },
+    }
 
 
 class ApplicationListResponse(BaseModel):

@@ -14,7 +14,7 @@ class Application(Base):
     user_name: Mapped[str] = mapped_column(nullable=False, index=True)
     description: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, server_default=func.now(), nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     def to_dict(self):

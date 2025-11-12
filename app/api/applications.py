@@ -9,6 +9,7 @@ from app.schemas.applications.schemas import (
     ApplicationListResponse,
     ApplicationFilter,
     ApplicationResponse,
+    ApplicationCreate,
 )
 
 logger = logging.getLogger(__name__)
@@ -40,3 +41,20 @@ async def get_applications(
     return ApplicationListResponse(
         items=items, total=total, pages=pages, size=size, page=page
     )
+
+
+@router.post(
+    "/",
+    response_model=ApplicationResponse,
+    status_code=201,
+    summary="Create new application",
+)
+@inject
+async def create_application(
+    application: ApplicationCreate,
+    app_repo: FromDishka[ApplicationRepository],
+):
+    new_application = await app_repo.create_application(
+        user_name=application.user_name, description=application.description
+    )
+    return ApplicationResponse.model_validate(new_application)

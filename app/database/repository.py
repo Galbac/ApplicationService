@@ -2,6 +2,7 @@ import logging
 from collections.abc import Sequence
 
 from sqlalchemy import select, func
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.applications.models import Application
@@ -40,3 +41,20 @@ class ApplicationRepository:
         logger.info(f"Retrieved {len(applications)} applications (total: {total})")
 
         return applications, total
+
+    async def create_application(self, user_name: str, description: str) -> Application:
+        try:
+            async with self.session.begin():
+                application = Application(user_name=user_name, description=description)
+                self.session.add(application)
+                await self.session.flush()
+                await self.session.refresh(application)
+            logger.info(f"Application created with id: {application.id}")
+            return application
+
+        except SQLAlchemyError:
+            logger.exception("Database error while creating application")
+            raise
+        except Exception:
+            logger.exception("Unexpected error while creating application")
+            raise
