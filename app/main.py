@@ -1,15 +1,12 @@
-import asyncio
 import logging
 from contextlib import asynccontextmanager
 
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
-from faststream import FastStream
-from faststream.kafka import KafkaBroker
 
 from app.api.applications import router as router_applications
-from app.core.config import settings
 from app.di.container import container
+from app.kafka.applications.fs_broker import broker
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
@@ -17,20 +14,15 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-broker = KafkaBroker(settings.kafka_bootstrap_servers)
-stream = FastStream(broker)
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("ЗАПУСК ПРИЛОЖЕНИЯ...")
-    await broker.connect()
-    task = asyncio.create_task(stream.run())
-    await asyncio.sleep(10)
+    await broker.start()
     logger.info("ЗАПУСК FASTSTREAM KAFKA БРОКЕРА...")
     yield
-    task.cancel()
     await broker.stop()
+    logger.info("ВЫХОД FASTSTREAM KAFKA БРОКЕРА...")
 
 
 app = FastAPI(

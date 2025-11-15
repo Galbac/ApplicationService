@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import (
 
 from app.core.config import settings
 from app.di.applications_provider import RepositoryProvider
-from app.di.kafka_provider import KafkaProvider, KafkaPublisherProvider
+from app.di.kafka_provider import KafkaPublisherProvider
 
 logger = logging.getLogger(__name__)
 
@@ -40,5 +40,5 @@ class DatabaseProvider(Provider):
 
 
 container = make_async_container(
-    DatabaseProvider(), RepositoryProvider(), KafkaProvider(), KafkaPublisherProvider()
+    DatabaseProvider(), RepositoryProvider(), KafkaPublisherProvider()
 )

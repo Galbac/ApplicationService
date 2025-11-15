@@ -11,7 +11,7 @@ class KafkaPublisher:
         self.logger = logging.getLogger(self.__class__.__name__)
 
     async def publish(self, topic: str, kafka_message: KafkaApplicationMessage):
-        await self.broker.connect()
+        # await self.broker.connect()
         publisher = self.broker.publisher(topic)
         try:
             await publisher.publish(kafka_message.model_dump(mode="json"))
