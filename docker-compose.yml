@@ -86,6 +86,24 @@ services:
     networks:
       - applications_network
 
+  maildev:
+    image: maildev/maildev
+    container_name: applications_maildev
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+    restart: unless-stopped
+    networks:
+      - applications_network
+    environment:
+      - TZ=Europe/Moscow
+      - MAILDEV_WEB_PORT=1080
+      - MAILDEV_SMTP_PORT=1025
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+
 volumes:
   postgres_data:
   kafka_data:

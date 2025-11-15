@@ -10,3 +10,4 @@ psycopg2-binary==2.9.11
 asyncpg==0.30.0
 faststream[kafka]==0.6.3
 faststream[cli]==0.6.3
+aiosmtplib==5.0.0
