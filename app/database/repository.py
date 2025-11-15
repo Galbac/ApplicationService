@@ -38,7 +38,7 @@ class ApplicationRepository:
         result = await self.session.execute(query)
         applications = result.scalars().all()
 
-        logger.info(f"Retrieved {len(applications)} applications (total: {total})")
+        logger.info(f"ПОЛУЧЕНО {len(applications)} ЗАЯВОК (ВСЕГО: {total})")
 
         return applications, total
 
@@ -49,12 +49,12 @@ class ApplicationRepository:
                 self.session.add(application)
                 await self.session.flush()
                 await self.session.refresh(application)
-            logger.info(f"Application created with id: {application.id}")
+            logger.info(f"ЗАЯВКА СОЗДАНА С ID: {application.id}")
             return application
 
         except SQLAlchemyError:
-            logger.exception("Database error while creating application")
+            logger.exception("ОШИБКА БАЗЫ ДАННЫХ ПРИ СОЗДАНИИ ЗАЯВКИ")
             raise
         except Exception:
-            logger.exception("Unexpected error while creating application")
+            logger.exception("НЕОЖИДАННАЯ ОШИБКА ПРИ СОЗДАНИИ ЗАЯВКИ")
             raise

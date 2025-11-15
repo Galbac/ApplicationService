@@ -8,3 +8,4 @@ pre-commit==3.8.0
 dishka==1.7.2
 psycopg2-binary==2.9.11
 asyncpg==0.30.0
+faststream[kafka]==0.6.3

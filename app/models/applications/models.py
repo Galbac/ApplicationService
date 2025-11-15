@@ -16,11 +16,3 @@ class Application(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "user_name": self.user_name,
-            "description": self.description,
-            "created_at": self.created_at,
-        }

@@ -1,10 +1,14 @@
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
+from faststream import FastStream
+from faststream.kafka import KafkaBroker
 
 from app.api.applications import router as router_applications
+from app.core.config import settings
 from app.di.container import container
 
 logging.basicConfig(
@@ -13,30 +17,37 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+broker = KafkaBroker(settings.kafka_bootstrap_servers)
+stream = FastStream(broker)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Starting application...")
+    logger.info("ЗАПУСК ПРИЛОЖЕНИЯ...")
+    await broker.connect()
+    task = asyncio.create_task(stream.run())
+    await asyncio.sleep(10)
+    logger.info("ЗАПУСК FASTSTREAM KAFKA БРОКЕРА...")
     yield
-    logger.info("Application shutdown complete")
+    task.cancel()
+    await broker.stop()
 
 
 app = FastAPI(
-    title="Application Processing Service",
-    description="Service for processing user requests",
+    title="СЕРВИС ОБРАБОТКИ ЗАЯВОК",
+    description="СЕРВИС ДЛЯ ОБРАБОТКИ ЗАПРОСОВ ПОЛЬЗОВАТЕЛЕЙ",
     version="1.0.0",
     lifespan=lifespan,
 )
 
-
 app.include_router(router=router_applications)
 
-container = setup_dishka(container, app=app)
+setup_dishka(container, app=app)
 
 
 @app.get("/")
 async def root():
-    return {"message": "Application Processing Service"}
+    return {"message": "СЕРВИС ОБРАБОТКИ ЗАЯВОК"}
 
 
 if __name__ == "__main__":

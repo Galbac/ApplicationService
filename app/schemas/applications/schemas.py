@@ -5,26 +5,26 @@ from pydantic import BaseModel, Field
 
 class ApplicationCreate(BaseModel):
     """
-    Scheme for creating new projects
+    Схема для создания новой заявки
     """
 
-    user_name: str = Field(..., min_length=1, max_length=100, description="Username")
+    user_name: str = Field(
+        ..., min_length=1, max_length=100, description="Имя пользователя"
+    )
     description: str = Field(
-        ..., min_length=1, max_length=1000, description="Application Description"
+        ..., min_length=1, max_length=1000, description="Описание заявки"
     )
 
 
 class ApplicationResponse(BaseModel):
     """
-    Response scheme for one request
+    Схема ответа для одной заявки
     """
 
-    id: int = Field(..., description="Application ID")
-    user_name: str = Field(..., description="Username")
-    description: str = Field(..., description="Application Description")
-    created_at: datetime = Field(
-        ..., description="Date and time of application creation"
-    )
+    id: int = Field(..., description="ID заявки")
+    user_name: str = Field(..., description="Имя пользователя")
+    description: str = Field(..., description="Описание заявки")
+    created_at: datetime = Field(..., description="Дата и время создания заявки")
 
     model_config = {
         "from_attributes": True,
@@ -36,28 +36,28 @@ class ApplicationResponse(BaseModel):
 
 class ApplicationListResponse(BaseModel):
     """
-    Response schema for a paginated ticket list
+    Схема ответа для постраничного списка заявок
     """
 
     items: list[ApplicationResponse] = Field(
-        ..., description="List of applications on the current page"
+        ..., description="Список заявок на текущей странице"
     )
-    total: int = Field(..., description="Total number of applications")
-    page: int = Field(..., description="Current page")
-    size: int = Field(..., description="Number of applications per page")
-    pages: int = Field(..., description="Total number of pages")
+    total: int = Field(..., description="Общее количество заявок")
+    page: int = Field(..., description="Текущая страница")
+    size: int = Field(..., description="Количество заявок на странице")
+    pages: int = Field(..., description="Общее количество страниц")
 
     model_config = {"from_attributes": True}
 
 
 class ApplicationFilter(BaseModel):
     """
-    Application filtering scheme
+    Схема фильтрации заявок
     """
 
-    user_name: str | None = Field(None, description="Filter by username")
-    page: int = Field(1, ge=1, description="Page number")
-    size: int = Field(10, ge=1, le=100, description="Number of elements per page")
+    user_name: str | None = Field(None, description="Фильтр по имени пользователя")
+    page: int = Field(1, ge=1, description="Номер страницы")
+    size: int = Field(10, ge=1, le=100, description="Количество элементов на странице")
 
 
 class KafkaApplicationMessage(BaseModel):
@@ -65,9 +65,7 @@ class KafkaApplicationMessage(BaseModel):
     Схема сообщения для Kafka
     """
 
-    id: int = Field(..., description="Application ID")
-    user_name: str = Field(..., description="Username")
-    description: str = Field(..., description="Application Description")
-    created_at: datetime = Field(
-        ..., description="Date and time of application creation"
-    )
+    id: int = Field(..., description="ID заявки")
+    user_name: str = Field(..., description="Имя пользователя")
+    description: str = Field(..., description="Описание заявки")
+    created_at: datetime = Field(..., description="Дата и время создания заявки")

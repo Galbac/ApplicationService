@@ -10,7 +10,8 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from app.core.config import settings
-from app.database.repository import ApplicationRepository
+from app.di.applications_provider import RepositoryProvider
+from app.di.kafka_provider import KafkaProvider, KafkaPublisherProvider
 
 logger = logging.getLogger(__name__)
 
@@ -21,13 +22,13 @@ class DatabaseProvider(Provider):
         engine = create_async_engine(
             settings.async_database_url, echo=False, pool_pre_ping=True
         )
-        logger.info(f"Database engine created: {engine}")
+        logger.info(f"СОЗДАН ДВИЖОК БАЗЫ ДАННЫХ: {engine}")
         return engine
 
     @provide(scope=Scope.APP)
     def session_maker(self, engine: AsyncEngine) -> async_sessionmaker[AsyncSession]:
         session = async_sessionmaker(engine, expire_on_commit=False)
-        logger.info(f"Session created: {session}")
+        logger.info(f"СОЗДАНА СЕССИЯ: {session}")
         return session
 
     @provide(scope=Scope.REQUEST)
@@ -38,13 +39,6 @@ class DatabaseProvider(Provider):
             yield session
 
 
-class RepositoryProvider(Provider):
-    @provide(scope=Scope.REQUEST)
-    def provide_application_repo(self, session: AsyncSession) -> ApplicationRepository:
-        return ApplicationRepository(session)
-
-
 container = make_async_container(
-    DatabaseProvider(),
-    RepositoryProvider(),
+    DatabaseProvider(), RepositoryProvider(), KafkaProvider(), KafkaPublisherProvider()
 )

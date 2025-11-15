@@ -11,10 +11,6 @@ class Settings(BaseSettings):
     kafka_bootstrap_servers: str
     kafka_topic: str
 
-    app_host: str
-    app_port: int
-    log_level: str
-
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", case_sensitive=False
     )
