@@ -30,6 +30,12 @@ app = FastAPI(
     description="СЕРВИС ДЛЯ ОБРАБОТКИ ЗАПРОСОВ ПОЛЬЗОВАТЕЛЕЙ",
     version="1.0.0",
     lifespan=lifespan,
+    openapi_tags=[
+        {
+            "name": "Заявки",
+            "description": "Операции, связанные с заявками пользователей: создание, получение списка.",
+        }
+    ],
 )
 
 app.include_router(router=router_applications)

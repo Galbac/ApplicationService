@@ -19,13 +19,60 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/applications", tags=["applications"])
 
 
-@router.get("/", response_model=ApplicationListResponse, summary="ПОЛУЧИТЬ ВСЕ ЗАЯВКИ")
+@router.get(
+    "/",
+    response_model=ApplicationListResponse,
+    summary="ПОЛУЧИТЬ ВСЕ ЗАЯВКИ",
+    description="""
+                Возвращает список заявок с возможностью фильтрации по имени пользователя и пагинации.
+
+                **Особенности:**
+                - Поддерживает фильтрацию по `user_name`
+                - Пагинация: `page` и `size` (максимум 100 записей на страницу)
+                - Возвращает общее количество заявок, число страниц и текущую страницу
+
+                **Пример ответа:**
+                ```json
+                {
+                  "items": [
+                    {
+                      "id": 1,
+                      "user_name": "ivanov",
+                      "description": "Нужен доступ к тестовому окружению",
+                      "created_at": "17-11-2025 10:30:00"
+                    }
+                  ],
+                  "total": 42,
+                  "page": 1,
+                  "size": 10,
+                  "pages": 5
+                }
+                ```
+                """,
+)
 @inject
 async def get_applications(
     app_repo: FromDishka[ApplicationRepository],
-    user_name: str = Query(None, description="Filter by user name"),
-    page: int = Query(1, ge=1, description="Page number"),
-    size: int = Query(10, ge=1, le=100, description="Page size"),
+    user_name: str | None = Query(
+        None,
+        min_length=1,
+        max_length=100,
+        description="Фильтр по имени пользователя (частичное совпадение)",
+        example="ivanov",
+    ),
+    page: int = Query(
+        1,
+        ge=1,
+        description="Номер страницы (начинается с 1)",
+        example=1,
+    ),
+    size: int = Query(
+        10,
+        ge=1,
+        le=100,
+        description="Количество записей на странице (максимум 100)",
+        example=10,
+    ),
 ):
     filters = ApplicationFilter(user_name=user_name, page=page, size=size)
     try:
@@ -51,6 +98,21 @@ async def get_applications(
     response_model=ApplicationResponse,
     status_code=201,
     summary="СОЗДАТЬ НОВУЮ ЗАЯВКУ",
+    description="""
+    Создаёт новую заявку и асинхронно публикует её в Kafka для дальнейшей обработки.
+
+    **Важно:**
+    - После успешного создания заявка отправляется в топик Kafka для аудита или внешней обработки
+    - В случае ошибки публикации в Kafka — заявка всё равно сохраняется в БД, но в логах будет предупреждение
+
+    **Пример запроса:**
+    ```json
+    {
+      "user_name": "petrov",
+      "description": "Нужен доступ к базе данных"
+    }
+    ```
+    """,
 )
 @inject
 async def create_application(
